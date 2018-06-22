@@ -24,16 +24,13 @@ module Main =
     [<EntryPoint>]
     let main argv = 
         // initialize an actor system
-        // YOU NEED TO FILL IN HERE
         let myActorSystem = System.create "MyActorSystem" (Configuration.load ())
         printInstructions ()
         
-        // make your first actors using the 'spawn' function
-        // YOU NEED TO FILL IN HERE
+        // make actors using the 'spawn' function
         let ConsoleWriterActor = spawn myActorSystem "consoleWriterActor" (actorOf consoleWriterActor)
         let ConsoleReaderActor = spawn myActorSystem "consoleReaderActor" (actorOf2 (consoleReaderActor ConsoleWriterActor))
         // tell the consoleReader actor to begin
-        // YOU NEED TO FILL IN HERE
         ConsoleReaderActor <! Start
         myActorSystem.WhenTerminated.Wait() 
         0
