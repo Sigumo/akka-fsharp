@@ -16,7 +16,8 @@ module Main =
         
         // make actors using the 'spawn' function
         let ConsoleWriterActor = spawn myActorSystem "consoleWriterActor" (actorOf consoleWriterActor)
-        let ConsoleReaderActor = spawn myActorSystem "consoleReaderActor" (actorOf2 (consoleReaderActor ConsoleWriterActor))
+        let ValidationActor = spawn myActorSystem "validationActor" (actorOf2 (validationActor ConsoleWriterActor))
+        let ConsoleReaderActor = spawn myActorSystem "consoleReaderActor" (actorOf2 (consoleReaderActor ValidationActor))
         // tell the consoleReader actor to begin
         ConsoleReaderActor <! Start
         
