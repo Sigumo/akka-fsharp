@@ -76,7 +76,7 @@ module Actors =
             match msg.Length with
             | 0 -> EmptyMessage
             | _ -> Message(msg)
-        
+            
         match message with
         | EmptyMessage -> 
             consoleWriter <! InputError("Input was blank. Please try again.\n", ErrorType.Null)
@@ -95,6 +95,13 @@ module Actors =
         let fileStreamReader = new StreamReader(fileStream, Text.Encoding.UTF8)
         let text = fileStreamReader.ReadToEnd()
         do mailbox.Self <! InitialRead(filePath, text)
+        
+        mailbox.Defer <| fun () -> 
+            (observer :> IDisposable).Dispose()
+            fileStreamReader.Close()
+            (fileStreamReader :> IDisposable).Dispose()
+            (fileStream :> IDisposable).Dispose()
+            
         let rec loop() =
             actor { 
                 let! message = mailbox.Receive()
